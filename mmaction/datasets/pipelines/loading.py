@@ -102,8 +102,8 @@ class SampleFrames:
         test_mode (bool): Store True when building test or validation dataset.
             Default: False.
         start_index (None): This argument is deprecated and moved to dataset
-            class (``BaseDataset``, ``VideoDatset``, ``RawframeDataset``, etc),
-            see this: https://github.com/open-mmlab/mmaction2/pull/89.
+            class (``BaseDataset``, ``VideoDataset``, ``RawframeDataset``,
+            etc), see this: https://github.com/open-mmlab/mmaction2/pull/89.
         keep_tail_frames (bool): Whether to keep tail frames when sampling.
             Default: False.
     """
@@ -227,16 +227,40 @@ class SampleFrames:
                 to the next transform in pipeline.
         """
         total_frames = results['total_frames']
-
         clip_offsets = self._sample_clips(total_frames)
-        frame_inds = clip_offsets[:, None] + np.arange(
-            self.clip_len)[None, :] * self.frame_interval
-        frame_inds = np.concatenate(frame_inds)
 
-        if self.temporal_jitter:
-            perframe_offsets = np.random.randint(
-                self.frame_interval, size=len(frame_inds))
-            frame_inds += perframe_offsets
+        print('total_frames:',total_frames)
+        if total_frames >= 10000 and total_frames < 100000:
+            frame_inds = clip_offsets[:, None] + np.arange(
+                self.clip_len)[None, :] * 100
+            frame_inds = np.concatenate(frame_inds)
+
+            if self.temporal_jitter:
+                perframe_offsets = np.random.randint(
+                    100, size=len(frame_inds))
+                frame_inds += perframe_offsets
+            results['frame_interval'] = 100
+
+        elif total_frames >= 100000:
+            frame_inds = clip_offsets[:, None] + np.arange(
+                self.clip_len)[None, :] * 1000
+            frame_inds = np.concatenate(frame_inds)
+
+            if self.temporal_jitter:
+                perframe_offsets = np.random.randint(
+                    1000, size=len(frame_inds))
+                frame_inds += perframe_offsets
+            results['frame_interval'] = 1000
+        else:
+            frame_inds = clip_offsets[:, None] + np.arange(
+                self.clip_len)[None, :] * self.frame_interval
+            frame_inds = np.concatenate(frame_inds)
+
+            if self.temporal_jitter:
+                perframe_offsets = np.random.randint(
+                    self.frame_interval, size=len(frame_inds))
+                frame_inds += perframe_offsets
+            results['frame_interval'] = self.frame_interval
 
         frame_inds = frame_inds.reshape((-1, self.clip_len))
         if self.out_of_bound_opt == 'loop':
@@ -254,7 +278,7 @@ class SampleFrames:
         frame_inds = np.concatenate(frame_inds) + start_index
         results['frame_inds'] = frame_inds.astype(np.int)
         results['clip_len'] = self.clip_len
-        results['frame_interval'] = self.frame_interval
+        #results['frame_interval'] = self.frame_interval
         results['num_clips'] = self.num_clips
         return results
 
@@ -282,8 +306,8 @@ class UntrimmedSampleFrames:
         frame_interval (int): Temporal interval of adjacent sampled frames.
             Default: 16.
         start_index (None): This argument is deprecated and moved to dataset
-            class (``BaseDataset``, ``VideoDatset``, ``RawframeDataset``, etc),
-            see this: https://github.com/open-mmlab/mmaction2/pull/89.
+            class (``BaseDataset``, ``VideoDataset``, ``RawframeDataset``,
+            etc), see this: https://github.com/open-mmlab/mmaction2/pull/89.
     """
 
     def __init__(self, clip_len=1, frame_interval=16, start_index=None):

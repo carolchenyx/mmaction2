@@ -17,9 +17,10 @@ from .rawframe_dataset import RawframeDataset
 from .rawvideo_dataset import RawVideoDataset
 from .ssn_dataset import SSNDataset
 from .video_dataset import VideoDataset
+from .video_dataset_ucf import VideoDataset_ucfcrime
 
 __all__ = [
-    'VideoDataset', 'build_dataloader', 'build_dataset', 'RepeatDataset',
+    'VideoDataset_ucfcrime','VideoDataset', 'build_dataloader', 'build_dataset', 'RepeatDataset',
     'RawframeDataset', 'BaseDataset', 'ActivityNetDataset', 'SSNDataset',
     'HVUDataset', 'AudioDataset', 'AudioFeatureDataset', 'ImageDataset',
     'RawVideoDataset', 'AVADataset', 'AudioVisualDataset',

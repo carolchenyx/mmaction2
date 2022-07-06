@@ -4,6 +4,12 @@ import os.path as osp
 from .base import BaseDataset
 from .builder import DATASETS
 
+# Copyright (c) OpenMMLab. All rights reserved.
+import os.path as osp
+
+from .base import BaseDataset
+from .builder import DATASETS
+
 
 @DATASETS.register_module()
 class VideoDataset_ucfcrime(BaseDataset):
@@ -47,15 +53,16 @@ class VideoDataset_ucfcrime(BaseDataset):
         video_infos = []
         with open(self.ann_file, 'r') as fin:
             for line in fin:
-                if 'Normal' in line:
-                    label = '0'
-                    filename = line
-                    label = int(label)
+                line_split = line.strip().split()
+                if self.multi_class:
+                    assert self.num_classes is not None
+                    filename, label = line_split[0], line_split[1:]
+                    label = list(map(int, label))
                 else:
-                    label = '1'
-                    filename = line
+                    filename, label = line_split
                     label = int(label)
                 if self.data_prefix is not None:
                     filename = osp.join(self.data_prefix, filename)
                 video_infos.append(dict(filename=filename, label=label))
         return video_infos
+

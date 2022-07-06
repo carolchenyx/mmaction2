@@ -132,6 +132,8 @@ def parse_ucf101_splits(level):
     return splits
 
 
+
+
 def parse_jester_splits(level):
     """Parse Jester into "train", "val" splits.
 
@@ -348,12 +350,13 @@ def parse_kinetics_splits(level, dataset):
                 label is the video label.
         """
         if test:
-            # video = f'{x[0]}_{int(x[1]):06d}_{int(x[2]):06d}'
-            video = f'{x[1]}_{int(float(x[2])):06d}_{int(float(x[3])):06d}'
+            #video = f'{x[0]}_{int(x[1]):06d}_{int(x[2]):06d}'
+            a= x[1].strip('-')
+            video = f'{a}_{int(float(x[2])):06d}_{int(float(x[3])):06d}'
             label = -1  # label unknown
             return video, label
-
-        video = f'{x[1]}_{int(float(x[2])):06d}_{int(float(x[3])):06d}'
+        b = x[1].strip('-')
+        video = f'{b}_{int(float(x[2])):06d}_{int(float(x[3])):06d}'
         if level == 2:
             video = f'{convert_label(x[0])}/{video}'
         else:
@@ -361,9 +364,9 @@ def parse_kinetics_splits(level, dataset):
         label = class_mapping[convert_label(x[0])]
         return video, label
 
-    train_file = f'data/{dataset}/annotations/kinetics_train.csv'
-    val_file = f'data/{dataset}/annotations/kinetics_val.csv'
-    test_file = f'data/{dataset}/annotations/kinetics_test.csv'
+    train_file = f'/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/{dataset}/annotations/train.csv'
+    val_file = f'/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/{dataset}/annotations/validate.csv'
+    test_file = f'/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/{dataset}/annotations/test.csv'
 
     csv_reader = csv.reader(open(train_file))
     # skip the first line
@@ -426,10 +429,10 @@ def parse_hmdb51_split(level):
     def generate_class_index_file():
         """This function will generate a `ClassInd.txt` for HMDB51 in a format
         like UCF101, where class id starts with 1."""
-        frame_path = 'data/hmdb51/rawframes'
+        video_path = 'data/hmdb51/videos'
         annotation_dir = 'data/hmdb51/annotations'
 
-        class_list = sorted(os.listdir(frame_path))
+        class_list = sorted(os.listdir(video_path))
         class_dict = dict()
         if not osp.exists(class_index_file):
             with open(class_index_file, 'w') as f:

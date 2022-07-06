@@ -6,6 +6,7 @@ import os.path as osp
 import random
 
 from mmcv.runner import set_random_seed
+
 from tools.data.anno_txt2json import lines2dictlist
 from tools.data.parse_file_list import (parse_directory, parse_diving48_splits,
                                         parse_hmdb51_split,
@@ -19,8 +20,9 @@ from tools.data.parse_file_list import (parse_directory, parse_diving48_splits,
 def parse_args():
     parser = argparse.ArgumentParser(description='Build file list')
     parser.add_argument(
-        'dataset',
+        '--dataset',
         type=str,
+        default= 'kinetics400',
         choices=[
             'ucf101', 'kinetics400', 'kinetics600', 'kinetics700', 'thumos14',
             'sthv1', 'sthv2', 'mit', 'mmit', 'activitynet', 'hmdb51', 'jester',
@@ -28,7 +30,7 @@ def parse_args():
         ],
         help='dataset to be built file list')
     parser.add_argument(
-        'src_folder', type=str, help='root directory for the frames or videos')
+        '--src_folder', default= '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/kinetics400/videos_val/',type=str, help='root directory for the frames or videos')
     parser.add_argument(
         '--rgb-prefix', type=str, default='img_', help='prefix of rgb frames')
     parser.add_argument(
@@ -44,12 +46,12 @@ def parse_args():
     parser.add_argument(
         '--num-split',
         type=int,
-        default=3,
+        default=1,
         help='number of split to file list')
     parser.add_argument(
         '--subset',
         type=str,
-        default='train',
+        default='val',
         choices=['train', 'val', 'test'],
         help='subset to generate file list')
     parser.add_argument(
@@ -61,13 +63,13 @@ def parse_args():
     parser.add_argument(
         '--format',
         type=str,
-        default='rawframes',
+        default='videos',
         choices=['rawframes', 'videos'],
         help='data format')
     parser.add_argument(
         '--out-root-path',
         type=str,
-        default='data/',
+        default='/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/',
         help='root path for output')
     parser.add_argument(
         '--output-format',
@@ -79,7 +81,7 @@ def parse_args():
     parser.add_argument(
         '--shuffle',
         action='store_true',
-        default=False,
+        default=True,
         help='whether to shuffle the file list')
     args = parser.parse_args()
 
@@ -113,9 +115,10 @@ def build_file_list(splits, frame_info, shuffle=False):
         """
         rgb_list, flow_list = list(), list()
         for item in split:
-            if item[0] not in frame_info:
+            #if item[0] not in frame_info:
+            if item[0][:-14] not in frame_info:
                 continue
-            if frame_info[item[0]][1] > 0:
+            if frame_info[item[0][:-14]][1] > 0:
                 # rawframes
                 rgb_cnt = frame_info[item[0]][1]
                 flow_cnt = frame_info[item[0]][2]
@@ -137,15 +140,15 @@ def build_file_list(splits, frame_info, shuffle=False):
             else:
                 # videos
                 if isinstance(item[1], int):
-                    rgb_list.append(f'{frame_info[item[0]][0]} {item[1]}\n')
-                    flow_list.append(f'{frame_info[item[0]][0]} {item[1]}\n')
+                    rgb_list.append(f'{frame_info[item[0][:-14]][0]} {item[1]}\n')
+                    flow_list.append(f'{frame_info[item[0][:-14]][0]} {item[1]}\n')
                 elif isinstance(item[1], list):
                     # only for multi-label datasets like mmit
-                    rgb_list.append(f'{frame_info[item[0]][0]} ' +
+                    rgb_list.append(f'{frame_info[item[0][:-14]][0]} ' +
                                     ' '.join([str(digit)
                                               for digit in item[1]]) + '\n')
                     flow_list.append(
-                        f'{frame_info[item[0]][0]} ' +
+                        f'{frame_info[item[0][:-14]][0]} ' +
                         ' '.join([str(digit) for digit in item[1]]) + '\n')
                 else:
                     raise ValueError(

@@ -8,6 +8,7 @@ import warnings
 
 import mmcv
 import torch
+import torch.distributed as dist
 from mmcv import Config, DictAction
 from mmcv.runner import get_dist_info, init_dist, set_random_seed
 from mmcv.utils import get_git_hash
@@ -16,12 +17,13 @@ from mmaction import __version__
 from mmaction.apis import init_random_seed, train_model
 from mmaction.datasets import build_dataset
 from mmaction.models import build_model
-from mmaction.utils import collect_env, get_root_logger, register_module_hooks
+from mmaction.utils import (collect_env, get_root_logger,
+                            register_module_hooks, setup_multi_processes)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a recognizer')
-    parser.add_argument('config', help='train config file path')
+    parser.add_argument('--config', default='/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/configs/recognition/i3d/i3d_nl_dot_product_r50_32x2x1_100e_kinetics400_rgb.py', help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from', help='the checkpoint file to resume from')
@@ -42,15 +44,21 @@ def parse_args():
     group_gpus.add_argument(
         '--gpus',
         type=int,
+        default=1,
         help='number of gpus to use '
         '(only applicable to non-distributed training)')
     group_gpus.add_argument(
         '--gpu-ids',
+        default=0,
         type=int,
         nargs='+',
         help='ids of gpus to use '
         '(only applicable to non-distributed training)')
     parser.add_argument('--seed', type=int, default=None, help='random seed')
+    parser.add_argument(
+        '--diff-seed',
+        action='store_true',
+        help='Whether or not set different seeds for different ranks')
     parser.add_argument(
         '--deterministic',
         action='store_true',
@@ -83,6 +91,9 @@ def main():
 
     cfg.merge_from_dict(args.cfg_options)
 
+    # set multi-process settings
+    setup_multi_processes(cfg)
+
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
@@ -98,10 +109,21 @@ def main():
                                 osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
-    if args.gpu_ids is not None:
-        cfg.gpu_ids = args.gpu_ids
-    else:
-        cfg.gpu_ids = range(1) if args.gpus is None else range(args.gpus)
+
+    if args.gpu_ids is not None or args.gpus is not None:
+        warnings.warn(
+            'The Args `gpu_ids` and `gpus` are only used in non-distributed '
+            'mode and we highly encourage you to use distributed mode, i.e., '
+            'launch training with dist_train.sh. The two args will be '
+            'deperacted.')
+        if args.gpu_ids is not None:
+            warnings.warn(
+                'Non-distributed training can only use 1 gpu now. We will '
+                'use the 1st one in gpu_ids. ')
+            cfg.gpu_ids = [args.gpu_ids]
+        elif args.gpus is not None:
+            warnings.warn('Non-distributed training can only use 1 gpu now. ')
+            cfg.gpu_ids = range(1)
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
@@ -143,7 +165,8 @@ def main():
     logger.info(f'Config: {cfg.pretty_text}')
 
     # set random seeds
-    seed = init_random_seed(args.seed)
+    seed = init_random_seed(args.seed, distributed=distributed)
+    seed = seed + dist.get_rank() if args.diff_seed else seed
     logger.info(f'Set random seed to {seed}, '
                 f'deterministic: {args.deterministic}')
     set_random_seed(seed, deterministic=args.deterministic)

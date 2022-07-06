@@ -21,9 +21,19 @@ class Recognizer3D(BaseRecognizer):
         if self.with_neck:
             x, loss_aux = self.neck(x, labels.squeeze())
             losses.update(loss_aux)
+        #ucf-crime: label to 64 clips
+        #labels = labels.expand(2, int(imgs.size(0)/2)).reshape(imgs.size(0), 1)
 
         cls_score = self.cls_head(x)
         gt_labels = labels.squeeze()
+
+        #ucf-crime: cls_score 64 to video numbers
+        cls_score_all = torch.zeros(0)
+        for i in range(len(gt_labels)):
+            cls_score_i = torch.mean(torch.topk(cls_score[32*i:32*(i+1),:],k=5,dim=0).values,dim=0).unsqueeze(dim=0)
+            cls_score_all = torch.cat((cls_score_all.cuda(),cls_score_i),dim=0)
+        cls_score = cls_score_all
+
         loss_cls = self.cls_head.loss(cls_score, gt_labels, **kwargs)
         losses.update(loss_cls)
 

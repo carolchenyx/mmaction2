@@ -1,5 +1,9 @@
 # TRN
 
+[Temporal Relational Reasoning in Videos](https://openaccess.thecvf.com/content_ECCV_2018/html/Bolei_Zhou_Temporal_Relational_Reasoning_ECCV_2018_paper.html)
+
+<!-- [ALGORITHM] -->
+
 ## Abstract
 
 <!-- [ABSTRACT] -->
@@ -7,36 +11,24 @@
 Temporal relational reasoning, the ability to link meaningful transformations of objects or entities over time, is a fundamental property of intelligent species. In this paper, we introduce an effective and interpretable network module, the Temporal Relation Network (TRN), designed to learn and reason about temporal dependencies between video frames at multiple time scales. We evaluate TRN-equipped networks on activity recognition tasks using three recent video datasets - Something-Something, Jester, and Charades - which fundamentally depend on temporal relational reasoning. Our results demonstrate that the proposed TRN gives convolutional neural networks a remarkable capacity to discover temporal relations in videos. Through only sparsely sampled video frames, TRN-equipped networks can accurately predict human-object interactions in the Something-Something dataset and identify various human gestures on the Jester dataset with very competitive performance. TRN-equipped networks also outperform two-stream networks and 3D convolution networks in recognizing daily activities in the Charades dataset. Further analyses show that the models learn intuitive and interpretable visual common sense knowledge in videos.
 
 <!-- [IMAGE] -->
+
 <div align=center>
 <img src="https://user-images.githubusercontent.com/34324155/143018998-d2120c3d-a9a7-4e4c-90b1-1e5ff1fd5f06.png" width="800"/>
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```BibTeX
-@article{zhou2017temporalrelation,
-    title = {Temporal Relational Reasoning in Videos},
-    author = {Zhou, Bolei and Andonian, Alex and Oliva, Aude and Torralba, Antonio},
-    journal={European Conference on Computer Vision},
-    year={2018}
-}
-```
-
-## Model Zoo
+## Results and Models
 
 ### Something-Something V1
 
-|config | resolution | gpus | backbone| pretrain | top1 acc (efficient/accurate)| top5 acc (efficient/accurate)| gpu_mem(M)  | ckpt | log| json|
-|:--|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|[trn_r50_1x1x8_50e_sthv1_rgb](/configs/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb.py) | height 100 | 8 | ResNet50 | ImageNet | 31.62 / 33.88 |60.01 / 62.12| 11010 | [ckpt](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb/trn_r50_1x1x8_50e_sthv1_rgb_20210401-163704a8.pth) | [log](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb/20210326_103948.log)| [json](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb/20210326_103948.log.json)|
+| config                                                                                 | resolution | gpus | backbone | pretrain | top1 acc (efficient/accurate) | top5 acc (efficient/accurate) | gpu_mem(M) |                                                                     ckpt                                                                      |                                                      log                                                       |                                                         json                                                         |
+| :------------------------------------------------------------------------------------- | :--------: | :--: | :------: | :------: | :---------------------------: | :---------------------------: | :--------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: |
+| [trn_r50_1x1x8_50e_sthv1_rgb](/configs/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb.py) | height 100 |  8   | ResNet50 | ImageNet |         31.62 / 33.88         |         60.01 / 62.12         |   11010    | [ckpt](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb/trn_r50_1x1x8_50e_sthv1_rgb_20210401-163704a8.pth) | [log](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb/20210326_103948.log) | [json](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb/20210326_103948.log.json) |
 
 ### Something-Something V2
 
-|config | resolution | gpus | backbone| pretrain | top1 acc (efficient/accurate)| top5 acc (efficient/accurate)| gpu_mem(M)  | ckpt | log| json|
-|:--|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|[trn_r50_1x1x8_50e_sthv2_rgb](/configs/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb.py) | height 256 | 8 | ResNet50 | ImageNet | 48.39 / 51.28 |76.58 / 78.65 | 11010 | [ckpt](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb/trn_r50_1x1x8_50e_sthv2_rgb_20210816-7abbc4c1.pth) | [log](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb/20210816_221356.log)| [json](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb/20210816_221356.log.json)|
+| config                                                                                 | resolution | gpus | backbone | pretrain | top1 acc (efficient/accurate) | top5 acc (efficient/accurate) | gpu_mem(M) |                                                                     ckpt                                                                      |                                                      log                                                       |                                                         json                                                         |
+| :------------------------------------------------------------------------------------- | :--------: | :--: | :------: | :------: | :---------------------------: | :---------------------------: | :--------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: |
+| [trn_r50_1x1x8_50e_sthv2_rgb](/configs/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb.py) | height 256 |  8   | ResNet50 | ImageNet |         48.39 / 51.28         |         76.58 / 78.65         |   11010    | [ckpt](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb/trn_r50_1x1x8_50e_sthv2_rgb_20210816-7abbc4c1.pth) | [log](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb/20210816_221356.log) | [json](https://download.openmmlab.com/mmaction/recognition/trn/trn_r50_1x1x8_50e_sthv2_rgb/20210816_221356.log.json) |
 
 :::{note}
 
@@ -89,3 +81,14 @@ python tools/test.py configs/recognition/trn/trn_r50_1x1x8_50e_sthv1_rgb.py \
 ```
 
 For more details, you can refer to **Test a dataset** part in [getting_started](/docs/getting_started.md#test-a-dataset).
+
+## Citation
+
+```BibTeX
+@article{zhou2017temporalrelation,
+    title = {Temporal Relational Reasoning in Videos},
+    author = {Zhou, Bolei and Andonian, Alex and Oliva, Aude and Torralba, Antonio},
+    journal={European Conference on Computer Vision},
+    year={2018}
+}
+```

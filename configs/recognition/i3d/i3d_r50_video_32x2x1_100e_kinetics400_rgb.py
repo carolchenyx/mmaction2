@@ -2,11 +2,11 @@ _base_ = ['./i3d_r50_32x2x1_100e_kinetics400_rgb.py']
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/kinetics400/videos_train'
-data_root_val = 'data/kinetics400/videos_val'
-ann_file_train = 'data/kinetics400/kinetics400_train_list_videos.txt'
-ann_file_val = 'data/kinetics400/kinetics400_val_list_videos.txt'
-ann_file_test = 'data/kinetics400/kinetics400_val_list_videos.txt'
+data_root = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/kinetics400/videos_train'
+data_root_val = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/kinetics400/videos_val'
+ann_file_train = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/kinetics400/kinetics400_train_list_videos.txt'
+ann_file_val = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/kinetics400/kinetics400_val_list_videos.txt'
+ann_file_test = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/mmaction2/data/kinetics400/kinetics400_val_list_videos.txt'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_bgr=False)
 train_pipeline = [
@@ -60,7 +60,7 @@ test_pipeline = [
     dict(type='ToTensor', keys=['imgs'])
 ]
 data = dict(
-    videos_per_gpu=8,
+    videos_per_gpu=4,
     workers_per_gpu=2,
     test_dataloader=dict(videos_per_gpu=1),
     train=dict(

@@ -5,6 +5,7 @@ _base_ = [
 
 # model settings
 model = dict(
+    type = 'Recognizer3D_ucf',
     backbone=dict(
         non_local=((0, 0, 0), (0, 1, 0, 1), (0, 1, 0, 1, 0, 1), (0, 0, 0)),
         non_local_cfg=dict(
@@ -93,4 +94,6 @@ data = dict(
         pipeline=test_pipeline))
 
 # runtime settings
-work_dir = './work_dirs/i3d_nl_dot_product_r50_video_32x2x1_100e_ucf_rgb/'
+work_dir = './../work_dirs/i3d_nl_dot_product_r50_video_32x2x1_100e_ucf_rgb/'
+evaluation = dict(
+    interval=50, metrics=['top_k_accuracy', 'mean_class_accuracy'])

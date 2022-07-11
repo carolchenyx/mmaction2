@@ -29,6 +29,7 @@ def parse_args():
         '--resume-from', help='the checkpoint file to resume from')
     parser.add_argument(
         '--validate',
+        default= True,
         action='store_true',
         help='whether to evaluate the checkpoint during training')
     parser.add_argument(

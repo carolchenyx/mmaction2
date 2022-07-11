@@ -229,6 +229,7 @@ class SampleFrames:
         total_frames = results['total_frames']
         clip_offsets = self._sample_clips(total_frames)
 
+        #ucf-crime data interval
         print('total_frames:',total_frames)
         if total_frames >= 10000 and total_frames < 100000:
             frame_inds = clip_offsets[:, None] + np.arange(

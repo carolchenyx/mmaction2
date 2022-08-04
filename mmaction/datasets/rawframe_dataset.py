@@ -92,7 +92,7 @@ class RawframeDataset(BaseDataset):
                  pipeline,
                  data_prefix=None,
                  test_mode=False,
-                 filename_tmpl='img_{:05}.jpg',
+                 filename_tmpl='-{:09}.jpg',
                  with_offset=False,
                  multi_class=False,
                  num_classes=None,
@@ -104,6 +104,7 @@ class RawframeDataset(BaseDataset):
                  **kwargs):
         self.filename_tmpl = filename_tmpl
         self.with_offset = with_offset
+        self.start_index = start_index
         super().__init__(
             ann_file,
             pipeline,
@@ -120,6 +121,7 @@ class RawframeDataset(BaseDataset):
                                               [0.5, 0.7071])
         self.default_s = kwargs.get('default_s', (224, 224))
 
+        self.start_index = 1
     def load_annotations(self):
         """Load annotation file to get video information."""
         if self.ann_file.endswith('.json'):

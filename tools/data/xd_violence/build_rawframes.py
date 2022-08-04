@@ -142,8 +142,8 @@ def extract_frame(vid_item):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='extract optical flows')
-    parser.add_argument('--src_dir', default='/media/hkuit155/carol/Dataset/xd-violence/others', type=str, help='source video directory')
-    parser.add_argument('--out_dir', default='/media/hkuit155/carol/Dataset/xd-violence/rgb', type=str, help='output rawframe directory')
+    parser.add_argument('--src_dir', default='/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/XD-Violence/2005_2804', type=str, help='source video directory')
+    parser.add_argument('--out_dir', default='/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/XD-Violence/rgb', type=str, help='output rawframe directory')
     parser.add_argument(
         '--task',
         type=str,

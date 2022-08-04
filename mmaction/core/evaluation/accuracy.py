@@ -133,12 +133,10 @@ def top_k_classes(scores, labels, k=10, mode='accurate'):
 
 def top_k_accuracy(scores, labels, topk=(1, )):
     """Calculate top k accuracy score.
-
     Args:
         scores (list[np.ndarray]): Prediction scores for each class.
         labels (list[int]): Ground truth labels.
         topk (tuple[int]): K value for top_k_accuracy. Default: (1, ).
-
     Returns:
         list[float]: Top k accuracy score for each k.
     """
@@ -150,7 +148,6 @@ def top_k_accuracy(scores, labels, topk=(1, )):
         match_array = np.logical_or.reduce(max_k_preds == labels, axis=1)
         topk_acc_score = match_array.sum() / match_array.shape[0]
         res.append(topk_acc_score)
-
     return res
 
 
@@ -176,16 +173,13 @@ def mmit_mean_average_precision(scores, labels):
         results.append(ap)
     return np.mean(results)
 
-
 def mean_average_precision(scores, labels):
     """Mean average precision for multi-label recognition.
-
     Args:
         scores (list[np.ndarray]): Prediction scores of different classes for
             each sample.
         labels (list[np.ndarray]): Ground truth many-hot vector for each
             sample.
-
     Returns:
         np.float: The mean average precision.
     """
@@ -201,7 +195,6 @@ def mean_average_precision(scores, labels):
     if results == []:
         return np.nan
     return np.mean(results)
-
 
 def binary_precision_recall_curve(y_score, y_true):
     """Calculate the binary precision recall curve at step thresholds.

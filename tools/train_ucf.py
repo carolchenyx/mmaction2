@@ -14,7 +14,7 @@ from mmcv.runner import get_dist_info, init_dist, set_random_seed
 from mmcv.utils import get_git_hash
 
 from mmaction import __version__
-from mmaction.apis import init_random_seed, train_model
+from mmaction.apis import init_random_seed, train_model, init_random_seed_ucf, train_model_ucf
 from mmaction.datasets import build_dataset
 from mmaction.models import build_model
 from mmaction.utils import (collect_env, get_root_logger,
@@ -78,6 +78,7 @@ def parse_args():
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -185,11 +186,13 @@ def main():
     if len(cfg.module_hooks) > 0:
         register_module_hooks(model, cfg.module_hooks)
 
-    if cfg.omnisource:
+    if cfg.training_method == 'omnisource':
         # If omnisource flag is set, cfg.data.train should be a list
         assert isinstance(cfg.data.train, list)
         datasets = [build_dataset(dataset) for dataset in cfg.data.train]
-    else:
+    elif cfg.training_method == 'epoch_based':
+        datasets = [build_dataset(cfg.data.train)]
+    elif cfg.training_method == 'ucf':
         datasets = [build_dataset(cfg.data.train)]
 
     if len(cfg.workflow) == 2:
@@ -210,15 +213,26 @@ def main():
             config=cfg.pretty_text)
 
     test_option = dict(test_last=args.test_last, test_best=args.test_best)
-    train_model(
-        model,
-        datasets,
-        cfg,
-        distributed=distributed,
-        validate=args.validate,
-        test=test_option,
-        timestamp=timestamp,
-        meta=meta)
+    if cfg.training_method == 'ucf':
+        train_model_ucf(
+            model,
+            datasets,
+            cfg,
+            distributed=distributed,
+            validate=args.validate,
+            test=test_option,
+            timestamp=timestamp,
+            meta=meta)
+    else:
+        train_model(
+            model,
+            datasets,
+            cfg,
+            distributed=distributed,
+            validate=args.validate,
+            test=test_option,
+            timestamp=timestamp,
+            meta=meta)
 
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ def parse_args():
         ],
         help='dataset to be built file list')
     parser.add_argument(
-        '--src_folder', default= '/media/hkuit155/carol/Dataset/ucf-crime/Anomaly-Videos/',type=str, help='root directory for the frames or videos')
+        '--src_folder', default= '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/Anomaly-Videos/',type=str, help='root directory for the frames or videos')
     parser.add_argument(
         '--rgb-prefix', type=str, default='img_', help='prefix of rgb frames')
     parser.add_argument(
@@ -63,13 +63,13 @@ def parse_args():
     parser.add_argument(
         '--format',
         type=str,
-        default='rawframes',
+        default='videos',
         choices=['rawframes', 'videos'],
         help='data format')
     parser.add_argument(
         '--out-root-path',
         type=str,
-        default='/media/hkuit155/carol/Dataset/ucf-crime/',
+        default='/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/',
         help='root path for output')
     parser.add_argument(
         '--output-format',

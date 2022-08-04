@@ -18,6 +18,7 @@ from .rawvideo_dataset import RawVideoDataset
 from .ssn_dataset import SSNDataset
 from .video_dataset import VideoDataset
 from .video_dataset_ucf import VideoDataset_ucfcrime
+from .image_dataset_ucf import ImageDataset_ucf
 
 __all__ = [
     'VideoDataset_ucfcrime','VideoDataset', 'build_dataloader', 'build_dataset', 'RepeatDataset',
@@ -25,5 +26,5 @@ __all__ = [
     'HVUDataset', 'AudioDataset', 'AudioFeatureDataset', 'ImageDataset',
     'RawVideoDataset', 'AVADataset', 'AudioVisualDataset',
     'BaseMiniBatchBlending', 'CutmixBlending', 'MixupBlending', 'DATASETS',
-    'PIPELINES', 'BLENDINGS', 'PoseDataset', 'ConcatDataset'
+    'PIPELINES', 'BLENDINGS', 'PoseDataset', 'ConcatDataset','ImageDataset_ucf'
 ]

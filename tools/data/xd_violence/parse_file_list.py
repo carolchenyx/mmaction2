@@ -132,55 +132,7 @@ def parse_ucf101_splits(level):
     return splits
 
 
-def parse_ucfcrime_splits(level):
-    """Parse ucfcrime dataset into "train", "val", "test" splits.
 
-    Args:
-        level (int): Directory level of data. 1 for the single-level directory,
-            2 for the two-level directory.
-
-    Returns:
-        list: "train", "val", "test" splits of UCF-101.
-    """
-    class_index_file = '/media/hkuit155/carol/Dataset/ucf-crime/ucfcrime_label_map.txt'
-    train_file_template = '/media/hkuit155/carol/Dataset/ucf-crime/Anomaly_Train.txt'
-    test_file_template = '/media/hkuit155/carol/Dataset/ucf-crime/Anomaly_Test.txt'
-
-    with open(class_index_file, 'r') as fin:
-        class_index = [x.strip().split() for x in fin]
-    class_mapping = {x[1]: int(x[0]) - 1 for x in class_index}
-
-    def line_to_map(line):
-        """A function to map line string to video and label.
-
-        Args:
-            line (str): A long directory path, which is a text path.
-
-        Returns:
-            tuple[str, str]: (video, label), video is the video id,
-                label is the video label.
-        """
-        items = line.strip().split()
-        video = osp.splitext(items[0])[0]
-        if level == 1:
-            video = osp.basename(video)
-            label = items[0]
-        elif level == 2:
-            video = osp.join(
-                osp.basename(osp.dirname(video)), osp.basename(video))
-            label = class_mapping[osp.dirname(video)]
-        return video, label
-
-    splits = []
-    for i in range(1, 4):
-        with open(train_file_template.format(i), 'r') as fin:
-            train_list = [line_to_map(x) for x in fin]
-
-        with open(test_file_template.format(i), 'r') as fin:
-            test_list = [line_to_map(x) for x in fin]
-        splits.append((train_list, test_list))
-
-    return splits
 
 def parse_jester_splits(level):
     """Parse Jester into "train", "val" splits.

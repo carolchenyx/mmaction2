@@ -230,38 +230,38 @@ class SampleFrames:
         clip_offsets = self._sample_clips(total_frames)
 
         #ucf-crime data interval
-        print('total_frames:',total_frames)
-        if total_frames >= 10000 and total_frames < 100000:
-            frame_inds = clip_offsets[:, None] + np.arange(
-                self.clip_len)[None, :] * 100
-            frame_inds = np.concatenate(frame_inds)
+        #print('total_frames:',total_frames)
+        # if total_frames >= 10000 and total_frames < 100000:
+        #     frame_inds = clip_offsets[:, None] + np.arange(
+        #         self.clip_len)[None, :] * 100
+        #     frame_inds = np.concatenate(frame_inds)
+        #
+        #     if self.temporal_jitter:
+        #         perframe_offsets = np.random.randint(
+        #             100, size=len(frame_inds))
+        #         frame_inds += perframe_offsets
+        #     results['frame_interval'] = 100
+        #
+        # elif total_frames >= 100000:
+        #     frame_inds = clip_offsets[:, None] + np.arange(
+        #         self.clip_len)[None, :] * 1000
+        #     frame_inds = np.concatenate(frame_inds)
+        #
+        #     if self.temporal_jitter:
+        #         perframe_offsets = np.random.randint(
+        #             1000, size=len(frame_inds))
+        #         frame_inds += perframe_offsets
+        #     results['frame_interval'] = 1000
+        # else:
+        frame_inds = clip_offsets[:, None] + np.arange(
+            self.clip_len)[None, :] * self.frame_interval
+        frame_inds = np.concatenate(frame_inds)
 
-            if self.temporal_jitter:
-                perframe_offsets = np.random.randint(
-                    100, size=len(frame_inds))
-                frame_inds += perframe_offsets
-            results['frame_interval'] = 100
-
-        elif total_frames >= 100000:
-            frame_inds = clip_offsets[:, None] + np.arange(
-                self.clip_len)[None, :] * 1000
-            frame_inds = np.concatenate(frame_inds)
-
-            if self.temporal_jitter:
-                perframe_offsets = np.random.randint(
-                    1000, size=len(frame_inds))
-                frame_inds += perframe_offsets
-            results['frame_interval'] = 1000
-        else:
-            frame_inds = clip_offsets[:, None] + np.arange(
-                self.clip_len)[None, :] * self.frame_interval
-            frame_inds = np.concatenate(frame_inds)
-
-            if self.temporal_jitter:
-                perframe_offsets = np.random.randint(
-                    self.frame_interval, size=len(frame_inds))
-                frame_inds += perframe_offsets
-            results['frame_interval'] = self.frame_interval
+        if self.temporal_jitter:
+            perframe_offsets = np.random.randint(
+                self.frame_interval, size=len(frame_inds))
+            frame_inds += perframe_offsets
+        results['frame_interval'] = self.frame_interval
 
         frame_inds = frame_inds.reshape((-1, self.clip_len))
         if self.out_of_bound_opt == 'loop':
@@ -1322,7 +1322,7 @@ class RawFrameDecode:
 
             frame_idx += offset
             if modality == 'RGB':
-                filepath = osp.join(directory, filename_tmpl.format(frame_idx))
+                filepath = osp.join(directory, 'img_'+directory.split('/')[-1]+filename_tmpl.format(frame_idx))
                 img_bytes = self.file_client.get(filepath)
                 # Get frame with channel order RGB directly.
                 cur_frame = mmcv.imfrombytes(img_bytes, channel_order='rgb')

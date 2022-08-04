@@ -15,18 +15,18 @@ model = dict(
             mode='dot_product')))
 
 # dataset settings
-dataset_type = 'VideoDataset_ucfcrime'
-data_root = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/Anomaly-Videos'
-data_root_val = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/Anomaly-Videos'
-ann_file_train = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/ucfcrime_train_split_1_videos.txt'
-ann_file_val = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/ucfcrime_val_split_1_videos.txt'
-ann_file_test = '/media/hkuit155/24d4ed16-ee67-4121-8359-66a09cede5e7/AbnormalDetection/DATASET/UCF-crime/ucfcrime_val_split_1_videos.txt'
+dataset_type = 'ImageDataset_ucf'
+data_root = '/media/hkuit155/carol/Dataset/ucf-crime/Anomaly-Videos'
+data_root_val = '/media/hkuit155/carol/Dataset/ucf-crime/Anomaly-Videos'
+ann_file_train = '/media/hkuit155/carol/Dataset/ucf-crime/ucfcrime_train_split_1_rawframes.txt'
+ann_file_val = '/media/hkuit155/carol/Dataset/ucf-crime/ucfcrime_val_split_1_rawframes.txt'
+ann_file_test = '/media/hkuit155/carol/Dataset/ucf-crime/ucfcrime_val_split_1_rawframes.txt'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_bgr=False)
 train_pipeline = [
-    dict(type='DecordInit'),
-    dict(type='SampleFrames', clip_len=32, frame_interval=50, num_clips=32),
-    dict(type='DecordDecode'),
+    #dict(type='DecordInit'),
+    dict(type='SampleFrames', clip_len=16, frame_interval=30, num_clips=32),
+    dict(type='RawFrameDecode'),
     dict(type='Resize', scale=(-1, 112)),
     dict(
         type='MultiScaleCrop',
@@ -42,14 +42,14 @@ train_pipeline = [
     dict(type='ToTensor', keys=['imgs', 'label'])
 ]
 val_pipeline = [
-    dict(type='DecordInit'),
+    #dict(type='DecordInit'),
     dict(
         type='SampleFrames',
-        clip_len=32,
-        frame_interval=50,
+        clip_len=16,
+        frame_interval=30,
         num_clips=32,
         test_mode=True),
-    dict(type='DecordDecode'),
+    dict(type='RawFrameDecode'),
     dict(type='Resize', scale=(-1, 112)),
     dict(type='CenterCrop', crop_size=112),
     dict(type='Normalize', **img_norm_cfg),
@@ -58,14 +58,14 @@ val_pipeline = [
     dict(type='ToTensor', keys=['imgs'])
 ]
 test_pipeline = [
-    dict(type='DecordInit'),
+    #dict(type='DecordInit'),
     dict(
         type='SampleFrames',
-        clip_len=32,
-        frame_interval=50,
+        clip_len=16,
+        frame_interval=30,
         num_clips=32,
         test_mode=True),
-    dict(type='DecordDecode'),
+    dict(type='RawFrameDecode'),
     dict(type='Resize', scale=(-1, 112)),
     dict(type='ThreeCrop', crop_size=112),
     dict(type='Normalize', **img_norm_cfg),
@@ -74,7 +74,7 @@ test_pipeline = [
     dict(type='ToTensor', keys=['imgs'])
 ]
 data = dict(
-    videos_per_gpu=2,
+    videos_per_gpu=4,
     workers_per_gpu=0,
     test_dataloader=dict(videos_per_gpu=1),
     train=dict(
@@ -97,3 +97,4 @@ data = dict(
 work_dir = './../work_dirs/i3d_nl_dot_product_r50_video_32x2x1_100e_ucf_rgb/'
 evaluation = dict(
     interval=50, metrics=['top_k_accuracy', 'mean_class_accuracy'])
+training_method ='ucf' #help='epoch_based//omnisource//ucf')
